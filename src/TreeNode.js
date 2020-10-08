@@ -48,15 +48,32 @@ export default class TreeNode {
     for (let i = 0; i < XTranspose.rows; ++i) {
       let currentFeature = XTranspose.getRow(i);
       let splitValues = this.featureSplit(currentFeature, y);
-      for (let j = 0; j < splitValues.length; ++j) {
-        let currentSplitVal = splitValues[j];
-        let splitted = this.split(currentFeature, y, currentSplitVal);
+      if (this.kind === 'classifier') {
+        for (let j = 0; j < splitValues.length; ++j) {
+          let currentSplitVal = splitValues[j];
+          let splitted = this.split(currentFeature, y, currentSplitVal);
 
-        let gain = gainFunctions[this.gainFunction](y, splitted);
-        if (check(gain, bestGain)) {
-          maxColumn = i;
-          maxValue = currentSplitVal;
-          bestGain = gain;
+          let gain = gainFunctions[this.gainFunction](y, splitted);
+          if (check(gain, bestGain)) {
+            maxColumn = i;
+            maxValue = currentSplitVal;
+            bestGain = gain;
+          }
+        }
+      } else {
+        for (let j = 0; j < splitValues.length; ++j) {
+          let currentSplitVal = splitValues[j];
+          let min_currentFeature = Math.min(...currentFeature);
+          let splitted = this.split(currentFeature, y, currentSplitVal);
+          let gain = Infinity;
+          if (min_currentFeature !== currentSplitVal) {
+              gain = gainFunctions[this.gainFunction](y, splitted);
+            }
+          if (check(gain, bestGain)) {
+            maxColumn = i;
+            maxValue = currentSplitVal;
+            bestGain = gain;
+          }
         }
       }
     }
