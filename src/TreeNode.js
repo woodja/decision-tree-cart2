@@ -96,7 +96,7 @@ export default class TreeNode {
   split(x, y, splitValue) {
     let lesser = [];
     let greater = [];
-
+    
     for (let i = 0; i < x.length; ++i) {
       if (x[i] < splitValue) {
         lesser.push(y[i]);
