@@ -63,19 +63,19 @@ export default class TreeNode {
           }
         }
       } else {
-      for (let j = 0; j < splitValues.length; ++j) {
-        let currentSplitVal = splitValues[j];
-        let splitted = this.split(currentFeature, y, currentSplitVal);
+        for (let j = 0; j < splitValues.length; ++j) {
+          let currentSplitVal = splitValues[j];
+          let splitted = this.split(currentFeature, y, currentSplitVal);
 
-        let gain = gainFunctions[this.gainFunction](y, splitted);
-        if (check(gain, bestGain)) {
-          maxColumn = i;
-          maxValue = currentSplitVal;
-          bestGain = gain;
-          numberSamples = currentFeature.length;
+          let gain = gainFunctions[this.gainFunction](y, splitted);
+          if (check(gain, bestGain)) {
+            maxColumn = i;
+            maxValue = currentSplitVal;
+            bestGain = gain;
+            numberSamples = currentFeature.length;
+          }
         }
       }
-    }
     }
 
     return {
