@@ -76,6 +76,7 @@ export default class TreeNode {
         }
       }
     }
+    }
 
     return {
       maxGain: bestGain,
