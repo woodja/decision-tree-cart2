@@ -1,3 +1,26 @@
+# Changelog
+
+### [2.1.1](https://www.github.com/mljs/decision-tree-cart/compare/v2.1.0...v2.1.1) (2022-01-14)
+
+
+### Bug Fixes
+
+* changes to fix issues 9, 15, 17, 28, 32 in random-forest  ([#20](https://www.github.com/mljs/decision-tree-cart/issues/20)) ([134da30](https://www.github.com/mljs/decision-tree-cart/commit/134da308e72fa75de7846d26eeb24ec1e4974ffa))
+
+## [2.1.0](https://www.github.com/mljs/decision-tree-cart/compare/v2.0.2...v2.1.0) (2021-07-30)
+
+
+### Features
+
+* configurable min gain to split ([#15](https://www.github.com/mljs/decision-tree-cart/issues/15)) ([7a5d32c](https://www.github.com/mljs/decision-tree-cart/commit/7a5d32c8c269517e49db8e7b2135a60e47a99d34))
+
+### [2.0.2](https://github.com/mljs/decision-tree-cart/compare/v2.0.1...v2.0.2) (2020-10-18)
+
+
+### Bug Fixes
+
+* do not error on empty array ([#12](https://github.com/mljs/decision-tree-cart/issues/12)) ([2e88dee](https://github.com/mljs/decision-tree-cart/commit/2e88dee928ea698376c01256504b51f04de49c98))
+
 ## [2.0.1](https://github.com/mljs/decision-tree-cart/compare/v2.0.0...v2.0.1) (2019-10-13)
 
 

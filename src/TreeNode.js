@@ -1,5 +1,5 @@
-import Matrix from 'ml-matrix';
 import mean from 'ml-array-mean';
+import { Matrix } from 'ml-matrix';
 
 import * as Utils from './utils';
 
@@ -26,6 +26,7 @@ export default class TreeNode {
     this.splitFunction = options.splitFunction;
     this.minNumSamples = options.minNumSamples;
     this.maxDepth = options.maxDepth;
+    this.gainThreshold = options.gainThreshold || 0;
   }
 
   /**
@@ -44,6 +45,7 @@ export default class TreeNode {
 
     let maxColumn;
     let maxValue;
+    let numberSamples;
 
     for (let i = 0; i < XTranspose.rows; ++i) {
       let currentFeature = XTranspose.getRow(i);
@@ -61,19 +63,16 @@ export default class TreeNode {
           }
         }
       } else {
-        for (let j = 0; j < splitValues.length; ++j) {
-          let currentSplitVal = splitValues[j];
-          let min_currentFeature = Math.min(...currentFeature);
-          let splitted = this.split(currentFeature, y, currentSplitVal);
-          let gain = Infinity;
-          if (min_currentFeature !== currentSplitVal) {
-              gain = gainFunctions[this.gainFunction](y, splitted);
-            }
-          if (check(gain, bestGain)) {
-            maxColumn = i;
-            maxValue = currentSplitVal;
-            bestGain = gain;
-          }
+      for (let j = 0; j < splitValues.length; ++j) {
+        let currentSplitVal = splitValues[j];
+        let splitted = this.split(currentFeature, y, currentSplitVal);
+
+        let gain = gainFunctions[this.gainFunction](y, splitted);
+        if (check(gain, bestGain)) {
+          maxColumn = i;
+          maxValue = currentSplitVal;
+          bestGain = gain;
+          numberSamples = currentFeature.length;
         }
       }
     }
@@ -82,6 +81,7 @@ export default class TreeNode {
       maxGain: bestGain,
       maxColumn: maxColumn,
       maxValue: maxValue,
+      numberSamples: numberSamples,
     };
   }
 
@@ -121,7 +121,7 @@ export default class TreeNode {
   featureSplit(x, y) {
     let splitValues = [];
     let arr = Utils.zip(x, y);
-    arr.sort(function(a, b) {
+    arr.sort((a, b) => {
       return a[0] - b[0];
     });
 
@@ -178,6 +178,7 @@ export default class TreeNode {
     this.splitValue = split.maxValue;
     this.splitColumn = split.maxColumn;
     this.gain = split.maxGain;
+    this.numberSamples = split.numberSamples;
 
     let splittedMatrix = Utils.matrixSplitter(
       X,
@@ -188,8 +189,10 @@ export default class TreeNode {
 
     if (
       currentDepth < this.maxDepth &&
-      (this.gain > 0.01 && this.gain !== parentGain) &&
-      (splittedMatrix.lesserX.length > 0 && splittedMatrix.greaterX.length > 0)
+      this.gain > this.gainThreshold &&
+      this.gain !== parentGain &&
+      splittedMatrix.lesserX.length > 0 &&
+      splittedMatrix.greaterX.length > 0
     ) {
       this.left = new TreeNode(this);
       this.right = new TreeNode(this);
